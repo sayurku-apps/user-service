@@ -1,0 +1,2 @@
+spring.datasource.password=input password mu disini
+jwt.secret=masukkan_jwt_token_32_karakter_biar_aman
