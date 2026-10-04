@@ -84,6 +84,12 @@ public class AddressService {
         }
     }
 
+    // Untuk order-service saat checkout: pemilik dikenali dari userId (header gateway), bukan email
+    @Transactional(readOnly = true)
+    public AddressResponse findForUser(UUID userId, UUID id) {
+        return AddressResponse.from(getOwnedAddress(id, userId));
+    }
+
     // Satu user cuma boleh punya satu alamat utama
     private void makeDefault(UUID userId, UserAddress target) {
         addressRepository.findByUserIdOrderByIsDefaultDescCreatedAtAsc(userId)

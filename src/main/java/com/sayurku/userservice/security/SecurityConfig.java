@@ -36,6 +36,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Endpoint ini bebas diakses tanpa token
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                        // Jalur antar-service (dipanggil order-service). Tidak dirute gateway,
+                        // jadi dari luar tidak bisa dijangkau.
+                        .requestMatchers("/internal/**").permitAll()
                         // Selain itu harus pakai token
                         .anyRequest().authenticated()
                 )
