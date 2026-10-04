@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -21,10 +22,12 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-//     Generate token dari email & role
-    public String generateToken(String email, String role) {
+    // Generate token dari id, email & role.
+    // userId ikut disimpan supaya nanti gateway bisa meneruskannya sebagai header X-User-Id.
+    public String generateToken(UUID userId, String email, String role) {
         return Jwts.builder()
                 .subject(email)
+                .claim("uid", userId.toString())
                 .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
