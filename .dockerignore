@@ -1,0 +1,8 @@
+# Jangan ikut dikirim ke Docker saat build
+target/
+.git/
+.idea/
+.vscode/
+HELP.md
+# Rahasia lokal tidak boleh masuk image
+src/main/resources/application-local.properties
