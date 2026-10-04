@@ -29,7 +29,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    // Butuh token. Email diambil dari token yang sudah divalidasi JwtFilter.
+    // Butuh login. Email diambil dari header X-User-Email yang dipasang gateway.
     @GetMapping("/me")
     public ResponseEntity<UserResponse> me(Authentication authentication) {
         return ResponseEntity.ok(authService.getCurrentUser(authentication.getName()));

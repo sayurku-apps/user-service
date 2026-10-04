@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,11 +13,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+// Token sudah diperiksa api-gateway. Gateway lalu meneruskan identitasnya lewat header
+// X-User-Email dan X-User-Role, jadi di sini cukup dibaca (sama seperti service lain).
+// Header dari client selalu dibuang gateway, jadi tidak bisa dipalsukan dari luar.
 @Component
-@RequiredArgsConstructor
-public class JwtFilter extends OncePerRequestFilter {
+public class GatewayAuthFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
+    public static final String USER_EMAIL = "X-User-Email";
+    public static final String USER_ROLE = "X-User-Role";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -26,31 +28,18 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Ambil header Authorization
-        String authHeader = request.getHeader("Authorization");
+        String email = request.getHeader(USER_EMAIL);
+        String role = request.getHeader(USER_ROLE);
 
-        // Cek apakah header ada dan diawali "Bearer "
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // Ambil token (hapus "Bearer " di depan)
-        String token = authHeader.substring(7);
-
-        // Validasi token
-        if (jwtUtil.isTokenValid(token)) {
-            String email = jwtUtil.extractEmail(token);
-            String role = jwtUtil.extractRole(token);
-
-            // Set authentication ke Spring Security context
+        // Tanpa header = request publik (register/login) atau tidak lewat gateway.
+        // Biarkan lanjut; SecurityConfig yang menolak kalau endpoint-nya butuh login.
+        if (email != null && role != null) {
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             email,
                             null,
                             List.of(new SimpleGrantedAuthority("ROLE_" + role))
                     );
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 

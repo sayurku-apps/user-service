@@ -11,6 +11,7 @@ public record UserResponse(
         String email,
         String phone,
         String role,
+        UUID branchId,
         Integer loyaltyPoints,
         LocalDateTime createdAt
 ) {
@@ -21,6 +22,7 @@ public record UserResponse(
                 u.getEmail(),
                 u.getPhone(),
                 u.getRole().name(),
+                u.getBranchId(),
                 u.getLoyaltyPoints(),
                 u.getCreatedAt()
         );

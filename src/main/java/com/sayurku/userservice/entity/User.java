@@ -40,6 +40,11 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    // Cabang tempat STAFF bekerja (id Branch di product-service, tanpa FK lintas service).
+    // Kosong untuk CUSTOMER dan ADMIN.
+    @Column(name = "branch_id")
+    private UUID branchId;
+
     @Column(nullable = false)
     @Builder.Default
     private Integer loyaltyPoints = 0;

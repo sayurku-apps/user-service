@@ -73,13 +73,14 @@ public class AuthService {
 
     private AuthResponse toAuthResponse(User user) {
         // Generate JWT token
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().name());
+        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().name(), user.getBranchId());
 
         return AuthResponse.builder()
                 .token(token)
                 .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getRole().name())
+                .branchId(user.getBranchId())
                 .build();
     }
 }

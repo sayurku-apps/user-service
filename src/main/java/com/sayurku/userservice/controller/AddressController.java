@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-// "me" = pemilik alamat diambil dari token, bukan dari URL
+// "me" = pemilik alamat diambil dari identitas login (header gateway), bukan dari URL
 @RestController
 @RequestMapping("/api/users/me/addresses")
 @RequiredArgsConstructor
