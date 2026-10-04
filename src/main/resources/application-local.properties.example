@@ -1,2 +1,4 @@
 spring.datasource.password=input password mu disini
 jwt.secret=masukkan_jwt_token_32_karakter_biar_aman
+# Rahasia bersama untuk jalur /internal (harus sama di semua service)
+internal.token=isi_token_internal_yang_SAMA_di_semua_service
