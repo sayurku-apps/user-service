@@ -57,7 +57,7 @@ public class User {
     }
 
     public enum Role {
-        CUSTOMER, VENDOR, ADMIN
+        CUSTOMER, STAFF, ADMIN    // STAFF = pegawai cabang
     }
 
 }
